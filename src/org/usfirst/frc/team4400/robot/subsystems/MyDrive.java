@@ -5,6 +5,9 @@ import org.usfirst.frc.team4400.robot.commands.MyDriveDefault;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -21,7 +24,8 @@ public class MyDrive extends Subsystem {
 	private WPI_TalonSRX leftFront, leftMid, leftRear, rightFront, rightMid, rightRear;
 	private SpeedControllerGroup leftGroup, rightGroup;
 	private AHRS navx;
-	public static final double maxGain = 0;
+	private Encoder coder;
+	public static final double kMaxGain = 0.05, kPulsesPerTurn = 40, kDiameter = 4*2.54, kDistancePerPulse = kPulsesPerTurn / kDiameter; 
 	private double maxOutput = 1;
 	private double lastTurnPower = 0, lastPower = 0; 
 	private double lastLeftPower = 0, lastRightPower = 0; 
@@ -49,6 +53,14 @@ public class MyDrive extends Subsystem {
 		rightGroup = new SpeedControllerGroup(rightFront, rightMid, rightRear);
 		
 		navx = new AHRS(SerialPort.Port.kUSB1);
+		navx.reset();
+		navx.enableLogging(true);
+		
+		coder = new Encoder(RobotMap.kencoderchannelA, RobotMap.kencoderchannelB);
+		coder.reset();
+		coder.setDistancePerPulse(kDistancePerPulse);
+		
+		
 	}
 	
     public void initDefaultCommand() {
@@ -61,7 +73,23 @@ public class MyDrive extends Subsystem {
     	return navx.getAngle();
     }
     
-    public String getType(){
+	public Encoder getCoder() {
+		return coder;
+	}
+	
+	public double getDistance(){
+		return coder.getDistance();
+	}
+	
+	public void resetCoder(){
+		coder.reset();
+	}
+	
+	public void resetNavx(){
+		navx.reset();
+	}
+	
+	public String getType(){
 		return type;
     }
     
@@ -136,10 +164,10 @@ public class MyDrive extends Subsystem {
 	
 	public void unitArcadeDrive(double movePower, double turnPower) {
 		movePower *= InvertedYAxis ? -1 : 1;
-		if(Math.abs(turnPower - lastTurnPower)> maxGain)
-			turnPower = turnPower >= lastTurnPower ? lastTurnPower + maxGain : lastTurnPower - maxGain;
-		if(Math.abs(movePower - lastPower)> maxGain)
-			movePower = movePower >= lastPower ? lastPower +maxGain : lastPower - maxGain;
+		if(Math.abs(turnPower - lastTurnPower)> kMaxGain)
+			turnPower = turnPower >= lastTurnPower ? lastTurnPower + kMaxGain : lastTurnPower - kMaxGain;
+		if(Math.abs(movePower - lastPower)> kMaxGain)
+			movePower = movePower >= lastPower ? lastPower +kMaxGain : lastPower - kMaxGain;
 		arcadeDrive(movePower, turnPower);
 	}
 
@@ -150,12 +178,10 @@ public class MyDrive extends Subsystem {
 	public void unitTankDrive(double leftPower, double rightPower) {
 		leftPower *= AxisInverted ? -1 :1;
 		rightPower *= AxisInverted ? -1 :1;
-		if(Math.abs(leftPower - lastLeftPower)>maxGain)
-			leftPower = leftPower >= lastLeftPower ? lastLeftPower + maxGain : lastLeftPower - maxGain;
-		if(Math.abs(rightPower-lastRightPower)>maxGain)
-			rightPower = rightPower >= lastRightPower ? lastRightPower + maxGain : lastRightPower - maxGain;
-	}
-    
-    
+		if(Math.abs(leftPower - lastLeftPower)>kMaxGain)
+			leftPower = leftPower >= lastLeftPower ? lastLeftPower + kMaxGain : lastLeftPower - kMaxGain;
+		if(Math.abs(rightPower-lastRightPower)>kMaxGain)
+			rightPower = rightPower >= lastRightPower ? lastRightPower + kMaxGain : lastRightPower - kMaxGain;
+	}    
 }
 

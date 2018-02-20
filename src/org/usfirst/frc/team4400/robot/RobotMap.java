@@ -33,11 +33,17 @@ public class RobotMap {
 	public static final byte Kintakerightmotor = 9;
 	public static final byte Kintakeleftmotor = 10;
 	
-	public static final byte Kelevatormotor = 1;
+	public static final byte Kelevatormotor = 11;
 	
+	public static final byte Kelevatorlimitup = 0;
+	public static final byte Kelevatorlimitdown = 1;
+
 	public static final byte kdoublesolenoidbox1 = 1;
 	public static final byte kdoublesolenoidbox2 = 2;
 	
 	public static final byte kdoublesolenoidintake1 = 3;
 	public static final byte kdoublesolenoidintake2 = 4;
+	
+	public static final byte kencoderchannelA = 1;
+	public static final byte kencoderchannelB = 2;
 }

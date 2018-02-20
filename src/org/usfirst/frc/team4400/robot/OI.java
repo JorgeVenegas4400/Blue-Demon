@@ -63,6 +63,8 @@ public class OI {
 		Button rb = new JoystickButton(Joystick1, 6);
 		Button izq = new JoystickButton(Joystick1, 7);
 		Button der = new JoystickButton(Joystick1, 8);
+		Button joyd = new JoystickButton(Joystick1, 9);
+		Button joyi = new JoystickButton(Joystick1, 10);
 		public OI(){
 			a.whileHeld(new ElevatorDown());
 			b.whileHeld(new PutBox());
@@ -73,7 +75,7 @@ public class OI {
 			izq.whenReleased(new InvertAxis());
 			der.whenReleased(new ShiftBox());
 		}
-		public Joystick getJoyestick(int i){
+		public Joystick getJoystick(int i){
 			return i == 0 ? Joystick1 : i == 1 ? Joystick2 : null;
 		}
 }

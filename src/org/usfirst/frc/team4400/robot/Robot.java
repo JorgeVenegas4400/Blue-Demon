@@ -25,9 +25,9 @@ import edu.wpi.first.wpilibj.command.Scheduler;
  */
 public class Robot extends TimedRobot {
 	public static final MyDrive drive = new MyDrive();
-	public static Intake intake = new Intake();
-	public static Elevator elevator = new Elevator();
-	public static Box box = new Box();
+	public static final Intake intake = new Intake();
+	public static final Elevator elevator = new Elevator();
+	public static final Box box = new Box();
 	public static OI oi;
 
 	

@@ -18,7 +18,7 @@ public class MyDriveDefault extends Command {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.drive);
         drive = Robot.drive;
-        Joy1 = Robot.oi.getJoyestick(0);
+        Joy1 = Robot.oi.getJoystick(0);
     }
 
     // Called just before this Command runs the first time
@@ -28,10 +28,10 @@ public class MyDriveDefault extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	drive.setMaxOutput(SmartDashboard.getNumber("Potencia Motores", 0.75) - Joy1.getRawAxis(2) *0.25 + Joy1.getRawAxis(3));
-    	if(drive.getType() == "arcade"){
+    	if(drive.getType() == "Arcade"){
     		drive.unitArcadeDrive(Joy1.getRawAxis(1), Joy1.getRawAxis(4), SmartDashboard.getNumber("Tolerancia Joysticks", 0.1));
     	}
-    	else if(drive.getType() == "tank"){
+    	else if(drive.getType() == "Tank"){
     		drive.unitTankDrive(Joy1.getRawAxis(1), Joy1.getRawAxis(5), SmartDashboard.getNumber("Tolerancia Joysticks", 0.1));
     	}
     	else {
